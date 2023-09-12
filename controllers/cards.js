@@ -33,7 +33,12 @@ const deleteCard = (req, res) => {
       }
       return res.status(200).send(card);
     })
-    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Некорректный id карточки' });
+      }
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
+    });
 };
 
 const addLikeCard = (req, res) => Cards.findByIdAndUpdate(
@@ -48,7 +53,7 @@ const addLikeCard = (req, res) => Cards.findByIdAndUpdate(
     return res.status(200).send(card);
   })
   .catch((err) => {
-    if (err.name === 'ValidationError') {
+    if (err.name === 'CastError') {
       return res.status(400).send({ message: 'Переданы некорректные данные' });
     }
     return res.status(500).send({ message: 'На сервере произошла ошибка' });
@@ -67,7 +72,7 @@ const deleteLikeCard = (req, res) => {
       return res.status(200).send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         return res.status(400).send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'На сервере произошла ошибка' });
