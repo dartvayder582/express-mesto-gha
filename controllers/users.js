@@ -1,8 +1,9 @@
 const Users = require('../models/user');
+const { notFoundError, badRequestError, serverError } = require('../errors/errors');
 
 const getUsers = (req, res) => Users.find({})
-  .then((users) => res.status(200).send(users))
-  .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
+  .then((users) => res.send(users))
+  .catch(() => serverError(res));
 
 const getUserById = (req, res) => {
   const { userId } = req.params;
@@ -10,15 +11,15 @@ const getUserById = (req, res) => {
   return Users.findById(userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+        return notFoundError(res, 'Запрашиваемый пользователь не найден');
       }
-      return res.status(200).send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Некорректный id пользователя' });
+        return badRequestError(res, 'Некорректный id пользователя');
       }
-      return res.status(500).send({ message: 'На сервере произошла ошибка' });
+      return serverError(res);
     });
 };
 
@@ -29,9 +30,9 @@ const createUser = (req, res) => {
     .then((newUser) => res.status(201).send(newUser))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Введены некорректные данные' });
+        return badRequestError(res, 'Введены некорректные данные');
       }
-      return res.status(500).send({ message: 'На сервере произошла ошибка' });
+      return serverError(res);
     });
 };
 
@@ -48,15 +49,15 @@ const updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+        return notFoundError(res, 'Запрашиваемый пользователь не найден');
       }
-      return res.status(200).send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Введены некорректные данные' });
+        return badRequestError(res, 'Введены некорректные данные');
       }
-      return res.status(500).send({ message: `На сервере произошла ошибка: ${err.message}` });
+      return serverError(res);
     });
 };
 
