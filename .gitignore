@@ -3,8 +3,9 @@ logs
 *.log
 npm-debug.log*
 
-# Dependency directory
+# Dependency directory and files
 node_modules
+.env
 
 # Optional npm cache directory
 .npm
