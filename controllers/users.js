@@ -56,7 +56,7 @@ const getUserById = (req, res, next) => {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
       return res.send({
-        _id: user._id,
+        // _id: user._id,
         email: user.email,
         name: user.name,
         about: user.about,
@@ -68,7 +68,7 @@ const getUserById = (req, res, next) => {
 
 const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
   .then((userData) => res.send({
-    _id: userData._id,
+    // _id: userData._id,
     email: userData.email,
     name: userData.name,
     about: userData.about,
@@ -77,7 +77,7 @@ const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
   .catch(next);
 
 const createUser = (req, res, next) => {
-  console.log('ffff');
+  console.log('test');
   const newUser = req.body;
   return Users.findOne({ email: newUser.email })
     .then((checkUser) => {
