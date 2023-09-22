@@ -64,25 +64,23 @@ const createUser = (req, res, next) => {
     avatar,
   } = req.body;
 
-  return Users.findOne({ email })
-    .then((checkUser) => {
-      if (checkUser) {
-        throw new UserExistError('Пользователь с таким e-mail уже существует');
-      }
-      return bcrypt.hash(password, 10)
-        .then((hash) => Users.create({
-          email,
-          password: hash,
-          name,
-          about,
-          avatar,
-        }))
-        .then((data) => {
-          res.status(201).send(resTemplate(data));
-        })
-        .catch(next);
+  return bcrypt.hash(password, 10)
+    .then((hash) => Users.create({
+      email,
+      password: hash,
+      name,
+      about,
+      avatar,
+    }))
+    .then((data) => {
+      res.status(201).send(resTemplate(data));
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        return next(new UserExistError('Пользователь с таким e-mail уже существует'));
+      }
+      return next(err);
+    });
 };
 
 const updateUser = (req, res, next) => {

@@ -1,12 +1,7 @@
 const jwt = require('jsonwebtoken');
+const { NotAuthError } = require('../errors');
 
 // const { JWT_SECRET } = process.env;
-
-const handleAuthError = (res) => {
-  res
-    .status(401)
-    .send({ message: 'Необходима авторизация' });
-};
 
 const extractBearerToken = (header) => header.replace('Bearer ', '');
 
@@ -15,7 +10,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return handleAuthError(res);
+    return next(new NotAuthError('Необходима авторизация'));
   }
 
   const token = extractBearerToken(authorization);
@@ -24,7 +19,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'this is a temporary key');
   } catch (err) {
-    return handleAuthError(res);
+    return next(new NotAuthError('Необходима авторизация'));
   }
 
   req.user = payload;

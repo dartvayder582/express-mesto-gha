@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { default: isURL } = require('validator/lib/isURL');
+const { regexLink } = require('../utils/constants');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -15,7 +16,7 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => /^https?:\/\/(www)?[-a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=%]+#?$/.test(v),
+      validator: (v) => regexLink.test(v),
     },
   },
   owner: {
