@@ -10,16 +10,7 @@ const { resTemplate } = require('../utils/constants');
 
 // const { NODE_ENV, JWT_SECRET } = process.env;
 
-// const resTemplate = (obj) => ({
-//   _id: obj._id,
-//   email: obj.email,
-//   name: obj.name,
-//   about: obj.about,
-//   avatar: obj.avatar,
-// });
-
 const login = (req, res, next) => {
-  console.log('login');
   const { email, password } = req.body;
 
   return Users.findUserByCredentials(email, password)
@@ -65,7 +56,6 @@ const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
   .catch(next);
 
 const createUser = (req, res, next) => {
-  console.log('test');
   const {
     email,
     password,

@@ -7,10 +7,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const publicRoutes = require('./routes/auth');
 const privateRoutes = require('./routes/index');
-// const {
-//   login,
-//   createUser,
-// } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const handleErrors = require('./middlewares/handleErrors');
 
