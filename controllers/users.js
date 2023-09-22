@@ -54,7 +54,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      return res.send(user);
+      return res.send(resTemplate(user));
     })
     .catch(next);
 };
