@@ -1,5 +1,5 @@
-const resTemplate = (obj) => ({
-  _id: obj._id,
+const resTemplate = (data, obj) => ({
+  _id: data._id,
   email: obj.email,
   name: obj.name,
   about: obj.about,

@@ -6,16 +6,17 @@ const {
   UserExistError,
   NotAuthError,
 } = require('../errors');
+// const { resTemplate } = require('../utils/constants');
 
 // const { NODE_ENV, JWT_SECRET } = process.env;
 
-const resTemplate = (obj) => ({
-  _id: obj._id,
-  email: obj.email,
-  name: obj.name,
-  about: obj.about,
-  avatar: obj.avatar,
-});
+// const resTemplate = (obj) => ({
+//   _id: obj._id,
+//   email: obj.email,
+//   name: obj.name,
+//   about: obj.about,
+//   avatar: obj.avatar,
+// });
 
 const login = (req, res, next) => {
   console.log('login');
@@ -54,13 +55,25 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      return res.send(resTemplate(user));
+      return res.send({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      });
     })
     .catch(next);
 };
 
 const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
-  .then((userData) => res.send(resTemplate(userData)))
+  .then((userData) => res.send({
+    _id: userData._id,
+    email: userData.email,
+    name: userData.name,
+    about: userData.about,
+    avatar: userData.avatar,
+  }))
   .catch(next);
 
 const createUser = (req, res, next) => {
@@ -76,8 +89,14 @@ const createUser = (req, res, next) => {
           email: newUser.email,
           password: hash,
         }))
-        .then(() => {
-          res.status(201).send(resTemplate(newUser));
+        .then((data) => {
+          res.status(201).send({
+            _id: data._id,
+            email: newUser.email,
+            name: newUser.name,
+            about: newUser.about,
+            avatar: newUser.avatar,
+          });
         })
         .catch(next);
     })
