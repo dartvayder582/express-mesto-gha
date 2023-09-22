@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 module.exports = ((err, req, res, next) => {
+  console.log(err);
   const { statusCode = 500, message } = err;
 
   return res
