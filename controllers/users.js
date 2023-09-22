@@ -11,6 +11,7 @@ const {
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const login = (req, res, next) => {
+  console.log('login');
   const { email, password } = req.body;
 
   return Users.findUserByCredentials(email, password)
@@ -60,6 +61,7 @@ const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
   .catch(next);
 
 const createUser = (req, res, next) => {
+  console.log('ffff');
   const newUser = req.body;
   return Users.findOne({ email: newUser.email })
     .then((checkUser) => {
@@ -71,8 +73,12 @@ const createUser = (req, res, next) => {
           email: newUser.email,
           password: hash,
         }))
-        .then(({ _id }) => {
-          res.status(201).send({ _id });
+        .then(() => {
+          res.status(201).send({
+            name: newUser.name,
+            about: newUser.about,
+            avatar: newUser.avatar,
+          });
         })
         .catch(next);
     })
