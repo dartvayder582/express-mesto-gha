@@ -8,7 +8,7 @@ const {
   NotAuthError,
 } = require('../errors');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+// const { NODE_ENV, JWT_SECRET } = process.env;
 
 const login = (req, res, next) => {
   console.log('login');
@@ -18,7 +18,8 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        'this is a temporary key',
+        // NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
       res
@@ -73,11 +74,10 @@ const createUser = (req, res, next) => {
           email: newUser.email,
           password: hash,
         }))
-        .then(() => {
+        .then(({ _id, email }) => {
           res.status(201).send({
-            name: newUser.name,
-            about: newUser.about,
-            avatar: newUser.avatar,
+            _id,
+            email,
           });
         })
         .catch(next);

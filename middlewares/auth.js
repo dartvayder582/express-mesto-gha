@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = process.env;
+// const { JWT_SECRET } = process.env;
 
 const handleAuthError = (res) => {
   res
@@ -29,7 +29,7 @@ module.exports = (req, res, next) => {
   //   });
   try {
     // console.log(token);
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(token, 'this is a temporary key');
   } catch (err) {
     return handleAuthError(res);
   }
