@@ -3,12 +3,19 @@ const bcrypt = require('bcryptjs');
 const Users = require('../models/user');
 const {
   NotFoundError,
-  BadRequestError,
   UserExistError,
   NotAuthError,
 } = require('../errors');
 
 // const { NODE_ENV, JWT_SECRET } = process.env;
+
+const resTemplate = (obj) => ({
+  _id: obj._id,
+  email: obj.email,
+  name: obj.name,
+  about: obj.about,
+  avatar: obj.avatar,
+});
 
 const login = (req, res, next) => {
   console.log('login');
@@ -49,16 +56,11 @@ const getUserById = (req, res, next) => {
       }
       return res.send(user);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequestError('Некорректный id пользователя'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
-  .then((userData) => res.send(userData))
+  .then((userData) => res.send(resTemplate(userData)))
   .catch(next);
 
 const createUser = (req, res, next) => {
@@ -74,11 +76,8 @@ const createUser = (req, res, next) => {
           email: newUser.email,
           password: hash,
         }))
-        .then(({ _id, email }) => {
-          res.status(201).send({
-            _id,
-            email,
-          });
+        .then(() => {
+          res.status(201).send(resTemplate(newUser));
         })
         .catch(next);
     })

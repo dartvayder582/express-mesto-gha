@@ -2,10 +2,6 @@
 module.exports = ((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
-  if (err.name === 'ValidationError') {
-    const VALID_ERROR = 400;
-    return res.status(VALID_ERROR).send({ message: 'Введены некорректные данные' });
-  }
   return res
     .status(statusCode)
     .send({
