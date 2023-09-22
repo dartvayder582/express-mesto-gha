@@ -61,13 +61,7 @@ const getUserById = (req, res, next) => {
 };
 
 const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
-  .then((userData) => res.send({
-    // _id: userData._id,
-    email: userData.email,
-    name: userData.name,
-    about: userData.about,
-    avatar: userData.avatar,
-  }))
+  .then((userData) => res.send(resTemplate(userData)))
   .catch(next);
 
 const createUser = (req, res, next) => {
