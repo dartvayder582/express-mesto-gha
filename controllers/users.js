@@ -6,7 +6,7 @@ const {
   UserExistError,
   NotAuthError,
 } = require('../errors');
-// const { resTemplate } = require('../utils/constants');
+const { resTemplate } = require('../utils/constants');
 
 // const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -55,7 +55,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      return res.send(user);
+      return res.send(resTemplate(user));
     })
     .catch(next);
 };
@@ -72,19 +72,29 @@ const getCurrentUser = (req, res, next) => Users.findById(req.user._id)
 
 const createUser = (req, res, next) => {
   console.log('test');
-  const newUser = req.body;
-  return Users.findOne({ email: newUser.email })
+  const {
+    email,
+    password,
+    name,
+    about,
+    avatar,
+  } = req.body;
+
+  return Users.findOne({ email })
     .then((checkUser) => {
       if (checkUser) {
         throw new UserExistError('Пользователь с таким e-mail уже существует');
       }
-      return bcrypt.hash(newUser.password, 10)
+      return bcrypt.hash(password, 10)
         .then((hash) => Users.create({
-          email: newUser.email,
+          email,
           password: hash,
+          name,
+          about,
+          avatar,
         }))
         .then((data) => {
-          res.status(201).send(data);
+          res.status(201).send(resTemplate(data));
         })
         .catch(next);
     })

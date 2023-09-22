@@ -1,9 +1,9 @@
-const resTemplate = (data, obj) => ({
+const resTemplate = (data) => ({
   _id: data._id,
-  email: obj.email,
-  name: obj.name,
-  about: obj.about,
-  avatar: obj.avatar,
+  email: data.email,
+  name: data.name,
+  about: data.about,
+  avatar: data.avatar,
 });
 
 const regexLink = /^https?:\/\/(www)?[-a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=%]+#?$/;
