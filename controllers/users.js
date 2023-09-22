@@ -55,13 +55,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
-      return res.send({
-        // _id: user._id,
-        email: user.email,
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
-      });
+      return res.send(user);
     })
     .catch(next);
 };
@@ -90,13 +84,7 @@ const createUser = (req, res, next) => {
           password: hash,
         }))
         .then((data) => {
-          res.status(201).send({
-            _id: data._id,
-            email: newUser.email,
-            name: newUser.name,
-            about: newUser.about,
-            avatar: newUser.avatar,
-          });
+          res.status(201).send(data);
         })
         .catch(next);
     })
